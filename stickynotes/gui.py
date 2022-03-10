@@ -258,7 +258,17 @@ class StickyNote:
         return False
 
     def add(self, *args):
-        self.note.noteset.new()
+        new_note = self.note.noteset.new()
+
+        # Set the new note to the current category
+        new_note.gui.set_category(None, self.note.category)
+        new_note.gui.populate_menu()  # Fix Category Menu Selected indicator
+
+        # Set the new note position below this note
+        w, h = self.note.properties.get("position", (10, 10))
+        h += self.winMain.get_allocation().height + 10
+        new_note.gui.winMain.move(w, h)
+
         return False
 
     def delete(self, *args):
